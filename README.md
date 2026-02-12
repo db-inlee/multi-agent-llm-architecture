@@ -1,12 +1,12 @@
-# From LangChain to LangGraph: 운영 가능한 멀티에이전트 설계 전환 사례
-
+# LLM Multi-Agent 아키텍처 설계 사례  
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![LangGraph](https://img.shields.io/badge/LangGraph-StateGraph-orange)
 ![FastAPI](https://img.shields.io/badge/FastAPI-SSE_Streaming-green)
 ![FAISS](https://img.shields.io/badge/FAISS-Vector_Search-purple)
 ![Redis](https://img.shields.io/badge/Redis-Session_&_Cache-red)
-![OpenAI](https://img.shields.io/badge/OpenAI-gpt--4o--mini-lightgrey)
+![OpenAI](https://img.shields.io/badge/OpenAI-gpt--4o-lightgrey)
 
+- Production 환경을 전제로 설계한 멀티에이전트 오케스트레이션 구조와 routing · supervisor · RAG · latency 최적화 사례 정리
 > skeleton 코드 + 다이어그램 + 벤치마크 중심의 아키텍처 쇼케이스.
 > 비즈니스 로직·LLM 프롬프트·사내 데이터는 제거됨.
 
@@ -23,7 +23,8 @@
 ## Why this architecture exists
 
 D2C 스킨케어 브랜드의 CS 챗봇. 4개 도메인(피부 상담 · 제품 추천 · A/S · CS)이
-**하나의 세션**에서 공존해야 했다. LangChain `AgentExecutor`로 시작했고, 3가지가 깨졌다:
+**하나의 세션**에서 공존해야 했다. 
+LangChain `AgentExecutor`로 시작했고, 3가지가 문제점이 있었다. 
 
 - 에이전트 전환 시 슬롯 손실 (flat dict 상태 관리)
 - 라우팅 레이턴시 20초+ (매 턴 LLM 5회 호출)
